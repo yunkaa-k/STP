@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+# --- Завантаження гему ---
+# Ми припускаємо, що гем встановлено в системі
+# або ми запускаємо його через 'bundle exec'
+begin
+  # Знаходимо та завантажуємо Gemfile, якщо він є
+  require File.expand_path('../config/environment', __dir__)
+rescue LoadError
+  # Якщо ми не в Rails-додатку, просто завантажуємо гем
+  require "ruby_outbox_gem"
+end
+
+puts "[RubyOutboxWorker] Starting worker..."
+puts "[RubyOutboxWorker] Polling interval: #{RubyOutboxGem.config.poll_interval} seconds."
+puts "[RubyOutboxWorker] Press Ctrl+C to stop."
+
+# --- Головний цикл воркера ---
+loop do
+  begin
+    # 1. Запускаємо один цикл Диспатчера
+    RubyOutboxGem::Dispatcher.new.call
+
+    # 2. Чекаємо перед наступним опитуванням
+    sleep RubyOutboxGem.config.poll_interval
+  
+  rescue Interrupt # Обробка Ctrl+C
+    puts "\n[RubyOutboxWorker] Stopping worker..."
+    exit
+  rescue StandardError => e
+    # Не даємо воркеру "впасти" через непередбачувану помилку
+    puts "[RubyOutboxWorker] ERROR: #{e.message}"
+    puts e.backtrace.join("\n")
+    # Чекаємо довше перед повторною спробою, щоб уникнути спаму помилками
+    sleep 30 
+  end
+end
