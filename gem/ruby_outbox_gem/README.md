@@ -21,16 +21,6 @@
     bundle install
     ```
 
-2.  **Налаштування Бази Даних**
-    Цей гем вимагає таблицю для подій. Створіть міграцію у вашому Rails-проєкті:
-    ```bash
-    rails g migration CreateOutboxEvents
-    ```
-    Скопіюйте в неї вміст файлу `db/migrate/20240101000001_create_outbox_events.rb` з цього гему. Потім запустіть:
-    ```bash
-    rails db:migrate
-    ```
-
 ---
 
 ## Використання
