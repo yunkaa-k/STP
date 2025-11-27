@@ -1,96 +1,43 @@
 # RubyOutboxGem
 
-Це Ruby-гем, що реалізує надійний архітектурний патерн **"Outbox"**. Він гарантує, що події (наприклад, для відправки в Kafka або API) будуть доставлені **атомарно** разом із вашими змінами в базі даних.
+TODO: Delete this and the text below, and describe your gem
 
+Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ruby_outbox_gem`. To experiment with that code, run `bin/console` for an interactive prompt.
 
----
+## Installation
 
-## Встановлення
+TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
 
-1.  **Додайте гем**
-    Додайте цей рядок до `Gemfile` вашого Rails-проєкту:
+Install the gem and add to the application's Gemfile by executing:
 
-    ```ruby
-    gem 'ruby_outbox_gem', path: '/шлях/до/вашого/гему/ruby_outbox_gem'
-    # або, якщо б він був опублікований:
-    # gem 'ruby_outbox_gem'
-    ```
-
-    А потім виконайте:
-    ```bash
-    bundle install
-    ```
-
----
-
-## Використання
-
-Гем надає два основні компоненти:
-
-1.  **`RubyOutboxGem::Publisher`** — для атомарного збереження подій у вашій транзакції.
-2.  **`RubyOutboxGem::Dispatcher`** — (використовується воркером) для надійної обробки та відправки цих подій.
-
-Вам також потрібно налаштувати **обробники (handlers)**, щоб Диспатчер знав, *що* робити з кожною подією.
-
----
-
-### Приклад (файл `demo.rb`):
-
-Ось як можна налаштувати та виконати повний цикл (публікація + обробка).
-
-```ruby
-# frozen_string_literal: true
-require "bundler/setup"
-
-# --- 1. Налаштування (Імітація середовища Rails) ---
-# У реальному додатку це не потрібно,
-# оскільки ActiveRecord вже буде налаштований.
-puts "[DEMO] Налаштування тестової БД в пам'яті..."
-require_relative "spec/support/database" # Завантажуємо та запускаємо міграції
-require_relative "lib/ruby_outbox_gem"    # Завантажуємо наш гем
-
-# --- 2. Конфігурація Обробника ---
-# Визначаємо, що робити, коли ми отримаємо подію 'UserRegistered'
-RubyOutboxGem.configure do |config|
-  config.handlers["UserRegistered"] = ->(payload) {
-    puts "=============================================="
-    puts "✅ ОБРОБНИК: Відправка email користувачу #{payload['user_id']}"
-    puts "=============================================="
-  }
-end
-
-# --- 3. Використання: Публікація події ---
-# Це відбувається всередині вашого коду (наприклад, в Rails-контролері)
-# в тій самій транзакції, де ви створюєте користувача.
-puts "[DEMO] Публікація події 'UserRegistered'..."
-RubyOutboxGem::Publisher.publish(
-  "UserRegistered",
-  { "user_id" => 42, "email" => "user@example.com" }
-)
-puts "[DEMO] Подію збережено в outbox_events."
-
-# --- 4. Запуск Воркера (Диспатчера) ---
-# У реальному додатку це працює в окремому процесі
-# (запущеному через `bundle exec ruby_outbox_worker`),
-# але тут ми запустимо його вручну для демонстрації.
-puts "[DEMO] Запуск Диспатчера для обробки..."
-RubyOutboxGem::Dispatcher.new.call
-```
----
-### Розробка та тестування
-Якщо ви хочете вдосконалити або змінити функціонал гему:
-
-Встановіть залежності розробки:
-```
-bundle install
+```bash
+bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
 ```
 
-Запустіть тести (RSpec), щоб перевірити коректність роботи:
-```
-bundle exec rspec
+If bundler is not being used to manage dependencies, install the gem by executing:
+
+```bash
+gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
 ```
 
-Ви також можете запустити демонстраційний скрипт, щоб побачити повний цикл "публікація-обробка" в дії:
-```
-bundle exec ruby manual_test.rb
-```
+## Usage
+
+TODO: Write usage instructions here
+
+## Development
+
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/ruby_outbox_gem. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/ruby_outbox_gem/blob/master/CODE_OF_CONDUCT.md).
+
+## License
+
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+## Code of Conduct
+
+Everyone interacting in the RubyOutboxGem project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/ruby_outbox_gem/blob/master/CODE_OF_CONDUCT.md).
