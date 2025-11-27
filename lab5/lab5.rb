@@ -1,8 +1,6 @@
-# Створюємо вихідну лямбду для демонстрації
 sum3 = ->(a, b, c) { a + b + c }
 
-# --- Реалізація функції curry3 ---
-# Приймає proc_or_lambda з *точно* 3 аргументами.
+# Реалізація curry3 
 def curry3(proc_or_lambda)
   # Визначаємо внутрішню рекурсивну лямбду `curried`
   curried = ->(*args_so_far) do
@@ -11,7 +9,7 @@ def curry3(proc_or_lambda)
       raise ArgumentError, "wrong number of arguments (given #{args_so_far.size}, expected 3 or fewer)"
     end
 
-    # Якщо зібрано достатньо аргументів (3), викликаємо оригінальну функцію
+    # Якщо зібрано достатньо аргументів, викликаємо оригінальну функцію
     if args_so_far.size == 3
       return proc_or_lambda.call(*args_so_far)
     end
@@ -25,7 +23,6 @@ def curry3(proc_or_lambda)
   end
 
   # Повертаємо початковий виклик `curried` без аргументів
-  # Цей виклик поверне першу callable-функцію, що чекає аргументи.
   return curried.call()
 end
 
